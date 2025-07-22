@@ -1,5 +1,7 @@
 using EnviosYa.Application.Common.Abstractions;
 using EnviosYa.Application.Features.Product.Commands.Create;
+using EnviosYa.RestAPI.Data.Products;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EnviosYa.RestAPI.Endpoints;
 
@@ -11,11 +13,10 @@ public static class Products
             .WithTags("Products")
             .WithOpenApi();
 
-        productGroup.MapPost("/products", async (ICommandHandler<CreateProductCommand, string> handler) =>
+        productGroup.MapPost("/", async ([FromBody] CreateProductDto request, [FromServices] ICommandHandler<CreateProductCommand, CreateProductResponseDto> handler) =>
         {
-            var result = await handler.Handle(
-                new CreateProductCommand(), default
-            );
+            var command = request.ToCommand();
+            var result = await handler.Handle( command );
 
             return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
         });

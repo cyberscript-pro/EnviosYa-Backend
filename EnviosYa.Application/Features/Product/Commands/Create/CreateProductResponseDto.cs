@@ -1,3 +1,3 @@
 namespace EnviosYa.Application.Features.Product.Commands.Create;
 
-public sealed record CreateProductResponseDto(Guid Id, string Name);
+public sealed record CreateProductResponseDto(string Name);
