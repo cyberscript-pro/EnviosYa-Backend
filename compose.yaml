@@ -1,0 +1,7 @@
+﻿services:
+  enviosya.restapi:
+    image: enviosya.restapi
+    build:
+      context: .
+      dockerfile: EnviosYa.RestAPI/Dockerfile
+

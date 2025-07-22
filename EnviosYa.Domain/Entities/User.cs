@@ -19,6 +19,7 @@ public class User : AggregateRoot<Guid>
     
     public string? ProfilePicture { get; set; }
     public string? Phone { get; set; }
+    public bool IsAvailable { get; set; } = true;
     
-    public bool IsAvailable { get; set; }
+    public Cart? Cart { get; set; }
 }

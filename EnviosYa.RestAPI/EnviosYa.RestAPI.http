@@ -1,0 +1,6 @@
+@EnviosYa.RestAPI_HostAddress = http://localhost:5063
+
+GET {{EnviosYa.RestAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
