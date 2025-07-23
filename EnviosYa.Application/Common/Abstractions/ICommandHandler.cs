@@ -11,5 +11,5 @@ public interface ICommandHandler<in TCommand>
 public interface ICommandHandler<in TCommand, TResponse>
     where TCommand : ICommand<TResponse>
 {
-    Task<Result<string>> Handle(TCommand command, CancellationToken cancellationToken = default);
+    Task<Result<TResponse>> Handle(TCommand command, CancellationToken cancellationToken = default);
 }

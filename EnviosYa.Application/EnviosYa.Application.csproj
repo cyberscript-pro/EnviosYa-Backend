@@ -10,12 +10,12 @@
       <Folder Include="Common\Services\" />
       <Folder Include="Features\Auth\Login\Commands\" />
       <Folder Include="Features\Auth\Login\Exceptions\" />
-      <Folder Include="Features\Product\Queries\" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="FluentValidation" Version="12.0.0" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
+      <PackageReference Include="OneOf" Version="3.0.271" />
       <PackageReference Include="Scrutor" Version="6.1.0" />
     </ItemGroup>
 
