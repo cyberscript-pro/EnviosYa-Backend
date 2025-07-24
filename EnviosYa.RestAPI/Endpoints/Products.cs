@@ -1,11 +1,11 @@
-using EnviosYa.Application.Common;
 using EnviosYa.Application.Common.Abstractions;
 using EnviosYa.Application.Features.Product.Commands.Create;
-using EnviosYa.Domain.Common;
-using EnviosYa.RestAPI.Data.Products;
+using EnviosYa.Application.Features.Product.Commands.Delete;
+using EnviosYa.Application.Features.Product.Commands.Update;
+using EnviosYa.Application.Features.Product.DTOs;
+using EnviosYa.Application.Features.Product.Queries.GetAll;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using OneOf;
 
 namespace EnviosYa.RestAPI.Endpoints;
 
@@ -16,6 +16,19 @@ public static class Products
         var productGroup = app.MapGroup("/products")
             .WithTags("Products")
             .WithOpenApi();
+
+        productGroup.MapGet("/", async ([FromServices] IQueryHandler<GetAllProductQuery, List<GetAllProductResponseDto>> handler) =>
+        {
+            var result = await handler.Handle(new GetAllProductQuery());
+
+            return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
+        })
+            .WithOpenApi(operation => new(operation)
+        {
+            Summary = "FindAll a products",
+            Description = "find all products in the system",
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
+        });
 
         productGroup.MapPost("/", async ([FromBody] CreateProductDto request, [FromServices] IValidator<CreateProductDto> validator, [FromServices] ICommandHandler<CreateProductCommand, CreateProductResponseDto> handler) =>
         {
@@ -31,6 +44,34 @@ public static class Products
             var result = await handler.Handle( command );
 
             return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
+        })
+            .WithOpenApi(operation => new(operation)
+        {
+            Summary = "Creates a product",
+            Description = "Creates a product in the system",
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
+        });
+
+        productGroup.MapPatch("/", async ([FromBody] UpdateProductDto request, [FromServices] IValidator<UpdateProductDto> validator, [FromServices] ICommandHandler<UpdateProductCommand, UpdateProductResponseDto> handler) =>
+        {
+
+        })
+        .WithOpenApi(operation => new(operation)
+        {
+            Summary = "Updates a product",
+            Description = "Updates a product in the system",
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
+        });
+        
+        productGroup.MapDelete("/", async ([FromServices] ICommandHandler<DeleteProductCommand, DeleteProductResponseDto> handler) => 
+        {
+
+        })
+        .WithOpenApi(operation => new(operation)
+        {
+            Summary = "Deletes a product",
+            Description = "Deletes a product in the system",
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
         });
 
     }

@@ -3,11 +3,11 @@ namespace EnviosYa.Domain.Constants;
 public enum CategoryProduct
 {
     // 1. Tecnología y Electrónicos
-    Tecnologia,
-    Smartphones,
-    AccesoriosMoviles,
-    Computacion,
-    Laptops,
+    Tecnologia = 0,
+    Smartphones = 1,
+    AccesoriosMoviles = 2,
+    Computacion = 3,
+    Laptops = 4,
     Tablets,
     Perifericos,
     Gaming,

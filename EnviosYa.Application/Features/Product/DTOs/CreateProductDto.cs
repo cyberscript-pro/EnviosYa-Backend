@@ -3,7 +3,7 @@ using System.Text;
 using EnviosYa.Application.Features.Product.Commands.Create;
 using EnviosYa.Domain.Constants;
 
-namespace EnviosYa.RestAPI.Data.Products;
+namespace EnviosYa.Application.Features.Product.DTOs;
 
 public record CreateProductDto( 
     string Name,

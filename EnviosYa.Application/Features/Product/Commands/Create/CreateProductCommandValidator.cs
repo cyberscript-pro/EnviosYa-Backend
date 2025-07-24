@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
+using EnviosYa.Application.Features.Product.DTOs;
 using EnviosYa.Domain.Constants;
-using EnviosYa.RestAPI.Data.Products;
 using FluentValidation;
 
 namespace EnviosYa.Application.Features.Product.Commands.Create;

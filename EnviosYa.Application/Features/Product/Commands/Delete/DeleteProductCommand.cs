@@ -1,6 +1,8 @@
+using EnviosYa.Application.Common.Abstractions;
+
 namespace EnviosYa.Application.Features.Product.Commands.Delete;
 
-public class DeleteProductCommand
+public class DeleteProductCommand : ICommand<DeleteProductResponseDto>
 {
     
 }
