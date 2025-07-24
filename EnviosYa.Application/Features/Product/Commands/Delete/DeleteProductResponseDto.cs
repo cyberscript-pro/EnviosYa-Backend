@@ -1,6 +1,3 @@
 namespace EnviosYa.Application.Features.Product.Commands.Delete;
 
-public class DeleteProductResponseDto
-{
-    
-}
+public sealed record DeleteProductResponseDto(string Message = "Product deleted");

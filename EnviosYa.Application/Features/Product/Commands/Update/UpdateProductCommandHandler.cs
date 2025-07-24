@@ -1,6 +1,7 @@
 using EnviosYa.Application.Common;
 using EnviosYa.Application.Common.Abstractions;
 using EnviosYa.Domain.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnviosYa.Application.Features.Product.Commands.Update;
 
@@ -8,12 +9,12 @@ internal sealed class UpdateProductCommandHandler(IRepository repository) : ICom
 {
     public async Task<Result<UpdateProductResponseDto>> Handle(UpdateProductCommand command, CancellationToken cancellationToken = default)
     {
-        var product = await repository.Products.FindAsync(command.Id);
+        var product = await repository.Products.FirstOrDefaultAsync(p => p.Id == command.Id && p.IsAvailable, cancellationToken);
 
         if (product is null)
         {
             return await Task.FromResult(
-                Result.Failure<UpdateProductResponseDto>(Error.NotFound("404", $"Product Not Found {command.Id}"))
+                Result.Failure<UpdateProductResponseDto>(Error.NotFound("400", $"Product Not Found {command.Id}"))
             );
         }
         

@@ -66,7 +66,13 @@ public static class Products
             var result = await handler.Handle(query);
 
             return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
-        });
+        })  
+            .WithOpenApi(operation => new(operation)
+        {
+            Summary = "Filter a product of categories",
+            Description = "Filter a product of categories in the system",
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
+        });;
 
         productGroup.MapPost("/", async ([FromBody] CreateProductDto request, [FromServices] IValidator<CreateProductDto> validator, [FromServices] ICommandHandler<CreateProductCommand, CreateProductResponseDto> handler) =>
         {
@@ -114,7 +120,10 @@ public static class Products
         
         productGroup.MapDelete("/{id}", async ([FromServices] ICommandHandler<DeleteProductCommand, DeleteProductResponseDto> handler, string id) => 
         {
-
+            var command = new DeleteProductCommand { Id = Guid.Parse(id) };
+            var result = await handler.Handle(command);
+            
+            return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
         })
         .WithOpenApi(operation => new(operation)
         {
