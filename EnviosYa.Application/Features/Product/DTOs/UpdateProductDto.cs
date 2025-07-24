@@ -1,4 +1,8 @@
+using System.Globalization;
+using System.Text;
+using EnviosYa.Application.Common.Services;
 using EnviosYa.Application.Features.Product.Commands.Update;
+using EnviosYa.Domain.Constants;
 
 namespace EnviosYa.Application.Features.Product.DTOs;
 
@@ -14,8 +18,19 @@ public record UpdateProductDto(
 
 public static class UpdateProductDtoToCommand
 {
-    public static UpdateProductCommand ToCommand(this UpdateProductDto updateProductDto, Guid id)
+    public static UpdateProductCommand ToCommand(this UpdateProductDto dto, Guid id)
     {
-        return new UpdateProductCommand();
+        CategoryMapper.TryParseCategory(dto.Category, out var category);
+        
+        return new UpdateProductCommand
+        {
+            Id = id,
+            Name = dto.Name,
+            Description = dto.Description,
+            Price = dto.Price,
+            Stock = dto.Stock,
+            Category = category,
+            ImagesUrls = dto.ImagesUrls
+        };
     }
 }

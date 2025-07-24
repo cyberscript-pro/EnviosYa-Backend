@@ -52,9 +52,20 @@ public static class Products
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
         });
 
-        productGroup.MapPatch("/", async ([FromBody] UpdateProductDto request, [FromServices] IValidator<UpdateProductDto> validator, [FromServices] ICommandHandler<UpdateProductCommand, UpdateProductResponseDto> handler) =>
+        productGroup.MapPatch("/{id}", async ([FromBody] UpdateProductDto request, [FromServices] IValidator<UpdateProductDto> validator, [FromServices] ICommandHandler<UpdateProductCommand, UpdateProductResponseDto> handler, string id) =>
         {
+            var validationResult = await validator.ValidateAsync(request);
 
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                return Results.BadRequest(errors);
+            }
+
+            var command = request.ToCommand(Guid.Parse(id));
+            var result = await handler.Handle(command);
+            
+            return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
         })
         .WithOpenApi(operation => new(operation)
         {

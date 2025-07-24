@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Common\Services\" />
       <Folder Include="Features\Auth\Login\Commands\" />
       <Folder Include="Features\Auth\Login\Exceptions\" />
     </ItemGroup>

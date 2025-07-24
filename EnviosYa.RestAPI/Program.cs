@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using EnviosYa.Application;
 using EnviosYa.Application.Features.Product.Commands.Create;
+using EnviosYa.Application.Features.Product.Commands.Update;
 using EnviosYa.Application.Features.Product.DTOs;
 using EnviosYa.Infrastructure;
 using EnviosYa.RestAPI.Endpoints;
@@ -42,6 +43,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IValidator<CreateProductDto>, CreateProductCommandValidator>();
+builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandValidator>();
 
 var app = builder.Build();
 
