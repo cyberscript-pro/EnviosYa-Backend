@@ -33,9 +33,16 @@ public static class Products
         });
 
         productGroup.MapGet("/{id}", async ([FromServices] IQueryHandler<GetOneProductQuery, GetOneProductResponseDto> handler, string id) =>
-        {
-            
-        })
+            {
+                var query = new GetOneProductQuery
+                {
+                    Id = Guid.Parse(id)
+                };
+
+                var result = await handler.Handle(query);
+                
+                return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
+            })
         .WithOpenApi(operation => new(operation)
         {
             Summary = "Find a product",
