@@ -3,6 +3,7 @@ using EnviosYa.Application;
 using EnviosYa.Application.Features.Product.Commands.Create;
 using EnviosYa.Application.Features.Product.Commands.Update;
 using EnviosYa.Application.Features.Product.DTOs;
+using EnviosYa.Application.Features.Product.Queries.GetFilterCategory;
 using EnviosYa.Infrastructure;
 using EnviosYa.RestAPI.Endpoints;
 using FluentValidation;
@@ -44,6 +45,7 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IValidator<CreateProductDto>, CreateProductCommandValidator>();
 builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandValidator>();
+builder.Services.AddScoped<IValidator<GetCategoryProductDto>, GetFilterCategoryProductQueryValidator>();
 
 var app = builder.Build();
 

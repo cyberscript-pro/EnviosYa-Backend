@@ -4,6 +4,8 @@ using EnviosYa.Application.Features.Product.Commands.Delete;
 using EnviosYa.Application.Features.Product.Commands.Update;
 using EnviosYa.Application.Features.Product.DTOs;
 using EnviosYa.Application.Features.Product.Queries.GetAll;
+using EnviosYa.Application.Features.Product.Queries.GetFilterCategory;
+using EnviosYa.Application.Features.Product.Queries.GetOne;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +30,35 @@ public static class Products
             Summary = "FindAll a products",
             Description = "find all products in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
+        });
+
+        productGroup.MapGet("/{id}", async ([FromServices] IQueryHandler<GetOneProductQuery, GetOneProductResponseDto> handler, string id) =>
+        {
+            
+        })
+        .WithOpenApi(operation => new(operation)
+        {
+            Summary = "Find a product",
+            Description = "Find a product in the system",
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
+        });
+
+        productGroup.MapGet("/filter/{category}", async ([FromServices] IValidator<GetCategoryProductDto> validator,[FromServices] IQueryHandler<GetFilterCategoryProductQuery,List<GetFilterCategoryProductResponseDto>> handler, string category) =>
+        {
+            var validationResult = await validator.ValidateAsync(new GetCategoryProductDto(category));
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                return Results.BadRequest(errors);
+            }
+
+            var productCategory = new GetCategoryProductDto(category);
+
+            var query = productCategory.ToCommand();
+            var result = await handler.Handle(query);
+
+            return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
         });
 
         productGroup.MapPost("/", async ([FromBody] CreateProductDto request, [FromServices] IValidator<CreateProductDto> validator, [FromServices] ICommandHandler<CreateProductCommand, CreateProductResponseDto> handler) =>
@@ -74,7 +105,7 @@ public static class Products
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
         });
         
-        productGroup.MapDelete("/", async ([FromServices] ICommandHandler<DeleteProductCommand, DeleteProductResponseDto> handler) => 
+        productGroup.MapDelete("/{id}", async ([FromServices] ICommandHandler<DeleteProductCommand, DeleteProductResponseDto> handler, string id) => 
         {
 
         })
