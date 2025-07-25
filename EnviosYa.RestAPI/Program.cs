@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 using EnviosYa.Application;
+using EnviosYa.Application.Features.Auth.Register.Commands.Create;
+using EnviosYa.Application.Features.Auth.Register.DTOs;
 using EnviosYa.Application.Features.Product.Commands.Create;
 using EnviosYa.Application.Features.Product.Commands.Update;
 using EnviosYa.Application.Features.Product.DTOs;
@@ -45,6 +47,7 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IValidator<CreateProductDto>, CreateProductCommandValidator>();
 builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandValidator>();
+builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserCommandValidator>();
 builder.Services.AddScoped<IValidator<GetCategoryProductDto>, GetFilterCategoryProductQueryValidator>();
 
 builder.Services.AddCors(options =>
@@ -74,6 +77,7 @@ app.MapScalarApiReference(options =>
 
 app.UseHttpsRedirection();
 
+app.MapUserEndpoints();
 app.MapProductsEndpoints();
 app.MapCartEndpoints();
 app.MapCartItemsEndpoints();

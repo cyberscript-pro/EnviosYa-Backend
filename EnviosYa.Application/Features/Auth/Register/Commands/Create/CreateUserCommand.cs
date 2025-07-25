@@ -1,16 +1,10 @@
-using EnviosYa.Domain.Common;
+using EnviosYa.Application.Common.Abstractions;
 using EnviosYa.Domain.Constants;
 
-namespace EnviosYa.Domain.Entities;
+namespace EnviosYa.Application.Features.Auth.Register.Commands.Create;
 
-public class User : AggregateRoot<Guid>
+public class CreateUserCommand : ICommand<CreateUserResponseDto>
 {
-    public User() : base(Guid.NewGuid())
-    {}
-    
-    public User(Guid id) : base(id)
-    {}
-    
     public required string FullName { get; set; }
     public required string Nickname { get; set; }
     public required string Email { get; set; }
@@ -19,7 +13,6 @@ public class User : AggregateRoot<Guid>
     
     public string? ProfilePicture { get; set; }
     public string? Phone { get; set; }
-    public bool IsAvailable { get; set; } = true;
     
-    public Cart? Cart { get; set; }
+    public Domain.Entities.Cart? Cart { get; set; }
 }

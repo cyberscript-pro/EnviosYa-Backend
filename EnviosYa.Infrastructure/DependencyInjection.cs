@@ -1,4 +1,6 @@
+using EnviosYa.Application.Common.Abstractions;
 using EnviosYa.Domain.Common;
+using EnviosYa.Infrastructure.Authentication;
 using EnviosYa.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,5 +30,6 @@ public static class DependencyInjection
         }
 
         services.AddScoped<IRepository>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
     }
 }
