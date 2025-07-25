@@ -8,7 +8,7 @@ public record CreateUserDto(
     string Nickname,
     string Email,
     string Password,
-    RolUser? Role,
+    RolUser Role,
     string? ProfilePicture,
     string? Phone
     );

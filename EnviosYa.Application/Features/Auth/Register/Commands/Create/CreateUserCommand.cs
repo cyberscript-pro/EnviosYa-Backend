@@ -9,7 +9,7 @@ public class CreateUserCommand : ICommand<CreateUserResponseDto>
     public required string Nickname { get; set; }
     public required string Email { get; set; }
     public required string Password { get; set; }
-    public RolUser? Role { get; set; } = RolUser.Cliente;
+    public RolUser Role { get; set; } = RolUser.Cliente;
     
     public string? ProfilePicture { get; set; }
     public string? Phone { get; set; }
