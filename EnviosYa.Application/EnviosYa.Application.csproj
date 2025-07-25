@@ -9,6 +9,13 @@
     <ItemGroup>
       <Folder Include="Features\Auth\Login\Commands\" />
       <Folder Include="Features\Auth\Login\Exceptions\" />
+      <Folder Include="Features\CartItem\Commands\Delete\" />
+      <Folder Include="Features\CartItem\Commands\Update\" />
+      <Folder Include="Features\CartItem\DTOs\" />
+      <Folder Include="Features\CartItem\Queries\GetOne\" />
+      <Folder Include="Features\Cart\Commands\" />
+      <Folder Include="Features\Cart\DTOs\" />
+      <Folder Include="Features\Cart\Queries\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -36,8 +36,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
             .IsRequired();
         
         builder.Property(p => p.IsAvailable)
-            .HasDefaultValue(true)
-            .IsRequired();
+            .HasDefaultValue(true);
 
     }
 }

@@ -47,8 +47,20 @@ builder.Services.AddScoped<IValidator<CreateProductDto>, CreateProductCommandVal
 builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandValidator>();
 builder.Services.AddScoped<IValidator<GetCategoryProductDto>, GetFilterCategoryProductQueryValidator>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
+app.UseCors("AllowFrontend");
 app.MapOpenApi();
 app.MapScalarApiReference(options =>
 {
@@ -63,5 +75,6 @@ app.MapScalarApiReference(options =>
 app.UseHttpsRedirection();
 
 app.MapProductsEndpoints();
+app.MapCartItemsEndpoints();
 
 app.Run();

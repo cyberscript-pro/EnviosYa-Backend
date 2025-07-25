@@ -16,6 +16,6 @@ public class Product : AggregateRoot<Guid>
     public required double Price { get; set; }
     public required int Stock { get; set; }
     public required CategoryProduct Category { get; set; }
-    public List<string> ImagesUrls { get; set; }
+    public required List<string> ImagesUrls { get; set; }
     public bool IsAvailable { get; set; } = true;
 }

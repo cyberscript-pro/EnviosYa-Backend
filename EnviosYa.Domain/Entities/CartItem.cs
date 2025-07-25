@@ -15,4 +15,5 @@ public class CartItem: AggregateRoot<Guid>
     public required int Cantidad { get; set; }
     public required Product Producto { get; set; } =  default!;
     public required Cart? Cart { get; set; }
+    public bool IsAvailable { get; set; } = true;
 }
