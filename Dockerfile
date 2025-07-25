@@ -1,11 +1,11 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-COPY ../EnviosYa.sln ./
-COPY ../EnviosYa.Application/ ../EnviosYa.Application/
-COPY ../EnviosYa.Domain/ ../EnviosYa.Domain/
-COPY ../EnviosYa.Infrastructure/ ../EnviosYa.Infrastructure/
-COPY . ./EnviosYa.RestAPI/
+COPY ./EnviosYa.sln ./
+COPY ./EnviosYa.Application/ ./EnviosYa.Application/
+COPY ./EnviosYa.Domain/ ./EnviosYa.Domain/
+COPY ./EnviosYa.Infrastructure/ ./EnviosYa.Infrastructure/
+COPY ./EnviosYa.RestAPI/ ./EnviosYa.RestAPI/
 
 WORKDIR /src/EnviosYa.RestAPI
 RUN dotnet restore
@@ -15,8 +15,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 
-ENV ASPNETCORE_URLS=http://+:9532
-EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8081
 
 ENTRYPOINT ["dotnet", "EnviosYa.RestAPI.dll"]
 
