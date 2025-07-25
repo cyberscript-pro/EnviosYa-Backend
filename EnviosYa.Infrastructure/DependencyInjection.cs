@@ -18,7 +18,7 @@ public static class DependencyInjection
 
     private static void AddRepository(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("EnviosYaConnection");
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         if (string.IsNullOrEmpty(connectionString))
             throw new InvalidOperationException("Connection string 'EnviosYaConnection' is not configured.");

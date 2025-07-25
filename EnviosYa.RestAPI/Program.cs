@@ -95,6 +95,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false)
+    .AddEnvironmentVariables();
+
 builder.WebHost.UseUrls("http://+:9532");
 
 var app = builder.Build();
