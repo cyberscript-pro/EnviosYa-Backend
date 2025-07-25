@@ -20,14 +20,12 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        if (string.IsNullOrEmpty(connectionString))
-            throw new InvalidOperationException("Connection string 'EnviosYaConnection' is not configured.");
+        // if (string.IsNullOrEmpty(connectionString))
+        //     throw new InvalidOperationException("Connection string 'EnviosYaConnection' is not configured.");
 
-        if (connectionString.Contains("enviosya_db"))
-        {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(connectionString));
-        }
+        
+        services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+        
 
         services.AddScoped<IRepository>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
