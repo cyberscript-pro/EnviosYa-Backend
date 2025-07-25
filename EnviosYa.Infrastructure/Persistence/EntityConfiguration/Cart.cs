@@ -27,5 +27,8 @@ public class CartEntityConfiguration : IEntityTypeConfiguration<Cart>
             .WithOne(i => i.Cart)
             .HasForeignKey(c => c.CartId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Property(c => c.IsAvailable)
+            .HasDefaultValue(true);
     }
 }

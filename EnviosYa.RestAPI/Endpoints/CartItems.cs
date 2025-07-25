@@ -16,13 +16,13 @@ public static class CartItems
         {
             var result = await handler.Handle(new GetAllCartItemQuery());
             
-            return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound();
+            return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
         })
         .WithOpenApi(operation => new (operation)
         {
             Summary = "FindAll a cart items",
             Description = "find all cart items in the system",
-            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "CartItemsa" } }
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "CartItems" } }
         });
     }
 }

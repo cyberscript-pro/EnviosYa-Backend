@@ -8,7 +8,7 @@ public sealed record GetAllCartItemResponseDto(
     Guid CartId,
     int Cantidad,
     Domain.Entities.Product product,
-    Cart? cart
+    Domain.Entities.Cart? cart
     );
 
 public static class GetAllCartItemToResponse

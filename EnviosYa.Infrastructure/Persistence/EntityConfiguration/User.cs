@@ -37,7 +37,11 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.ProfilePicture);
 
         builder.Property(u => u.IsAvailable)
-            .HasDefaultValue(true)
-            .IsRequired();
+            .HasDefaultValue(true);
+        
+        builder.HasOne(u => u.Cart)
+            .WithOne(c => c.User)
+            .HasForeignKey<Cart>(c => c.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

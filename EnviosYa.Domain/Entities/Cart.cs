@@ -14,4 +14,5 @@ public class Cart: AggregateRoot<Guid>
     public required User User { get; set; } = default!;
 
     public required List<CartItem> Items { get; set; } = new();
+    public bool IsAvailable { get; set; } = true;
 }

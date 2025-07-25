@@ -75,6 +75,7 @@ app.MapScalarApiReference(options =>
 app.UseHttpsRedirection();
 
 app.MapProductsEndpoints();
+app.MapCartEndpoints();
 app.MapCartItemsEndpoints();
 
 app.Run();
