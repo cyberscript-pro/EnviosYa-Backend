@@ -96,10 +96,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false)
-    .AddEnvironmentVariables();
-
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
@@ -117,10 +113,9 @@ app.MapScalarApiReference(options =>
         .WithTheme(ScalarTheme.Purple)
         .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
         .WithModels(true)
-        .WithSearchHotKey("k");
+        .WithSearchHotKey("k")
+        .WithBaseServerUrl("https://enviosya-backend-production.up.railway.app");
 });
-
-app.MapGet("/", () => Results.Ok(new { message = "Welcome to EnviosYa-Backend!" }));
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
