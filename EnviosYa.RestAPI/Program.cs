@@ -99,8 +99,6 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false)
     .AddEnvironmentVariables();
 
-builder.WebHost.UseUrls("http://+:8081");
-
 var app = builder.Build();
 
 app.UseAuthentication();
