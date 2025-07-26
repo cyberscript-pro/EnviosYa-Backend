@@ -14,7 +14,6 @@
       <Folder Include="Features\CartItem\Commands\Update\" />
       <Folder Include="Features\CartItem\DTOs\" />
       <Folder Include="Features\CartItem\Queries\GetOne\" />
-      <Folder Include="Features\Cart\Commands\" />
       <Folder Include="Features\Cart\DTOs\" />
     </ItemGroup>
 

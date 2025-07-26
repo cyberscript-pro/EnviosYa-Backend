@@ -16,6 +16,7 @@ using EnviosYa.Infrastructure.Authentication;
 using EnviosYa.RestAPI.Endpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 
@@ -76,8 +77,6 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IValidator<LoginUserDto>, LoginUserCommandValidator>();
 builder.Services.AddScoped<IValidator<CreateProductDto>, CreateProductCommandValidator>();
 builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandValidator>();
@@ -89,15 +88,21 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            //.WithOrigins("http://localhost:3000")
-            .AllowAnyOrigin()
+            .WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
 
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
 var app = builder.Build();
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -114,6 +119,7 @@ app.MapScalarApiReference(options =>
         .WithSearchHotKey("k");
 });
 
+app.UseStatusCodePages();
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 

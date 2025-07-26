@@ -11,7 +11,7 @@ public static class AuthEndpoint
     public static void MapAuthEndpoints(this WebApplication app)
     {
         var authGroup = app.MapGroup("/auth")
-            .WithTags("Auth")
+            .WithTags("Authentication")
             .WithOpenApi();
 
         authGroup.MapPost("/login", async ([FromBody] LoginUserDto dto, [FromServices] IValidator<LoginUserDto> validator, [FromServices] ICommandHandler<LoginUserCommand, LoginUserResponseDto> handler) =>
@@ -33,6 +33,17 @@ public static class AuthEndpoint
         {
             Summary = "Login a user", 
             Description = "Login a user through its credentials",
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Authentication" } }
+        });
+
+        authGroup.MapGet("/me", async () =>
+        {
+
+        })
+        .WithOpenApi(operation => new (operation)
+        {
+            Summary = "Get current freelancer",
+            Description = "Get current logged freelancer user data",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Authentication" } }
         });
     }

@@ -14,7 +14,7 @@ public static class Users
             .WithTags("Users")
             .WithOpenApi();
 
-        usersGroup.MapPost("/users/register", async ([FromBody] CreateUserDto dto, [FromServices] IValidator<CreateUserDto> validator, [FromServices] ICommandHandler<CreateUserCommand, CreateUserResponseDto> handler) =>
+        usersGroup.MapPost("/register", async ([FromBody] CreateUserDto dto, [FromServices] IValidator<CreateUserDto> validator, [FromServices] ICommandHandler<CreateUserCommand, CreateUserResponseDto> handler) =>
         {
             var validationResult = await validator.ValidateAsync(dto);
 

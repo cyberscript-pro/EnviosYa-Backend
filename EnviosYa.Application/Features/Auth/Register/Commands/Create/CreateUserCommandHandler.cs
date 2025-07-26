@@ -1,5 +1,6 @@
 using EnviosYa.Application.Common;
 using EnviosYa.Application.Common.Abstractions;
+using EnviosYa.Application.Features.Cart.Commands.Create;
 using EnviosYa.Domain.Common;
 using EnviosYa.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -31,9 +32,19 @@ public class CreateUserCommandHandler(IRepository repository, IPasswordHasher ha
         repository.Users.Add(user);
         await repository.SaveChangesAsync(cancellationToken);
 
+        var commandCart = new CreateCardCommand
+        {
+            UserId = user.Id,
+            User = user
+        };
+        var handler = new CreateCardCommandHandler(repository);
+        
+        var result = await handler.Handle(commandCart);
+
         return await Task.FromResult(Result.Success(new CreateUserResponseDto(
             command.Nickname,
-            command.Email
+            command.Email,
+            result.Value.Id
         )));
     }
 }
