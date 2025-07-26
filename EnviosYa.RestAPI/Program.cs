@@ -120,14 +120,7 @@ app.MapScalarApiReference(options =>
         .WithSearchHotKey("k");
 });
 
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path.StartsWithSegments("/scalar"))
-    {
-        context.Request.Scheme = "https";
-    }
-    await next();
-});
+app.MapGet("/", () => Results.Ok(new { message = "Welcome to EnviosYa-Backend!" }));
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
