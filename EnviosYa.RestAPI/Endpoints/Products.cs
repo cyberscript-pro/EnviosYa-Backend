@@ -6,6 +6,7 @@ using EnviosYa.Application.Features.Product.DTOs;
 using EnviosYa.Application.Features.Product.Queries.GetAll;
 using EnviosYa.Application.Features.Product.Queries.GetFilterCategory;
 using EnviosYa.Application.Features.Product.Queries.GetOne;
+using EnviosYa.Domain.Constants;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -94,7 +95,8 @@ public static class Products
             Summary = "Creates a product",
             Description = "Creates a product in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
-        });
+        })
+        .RequireAuthorization(policy => policy.RequireRole(nameof(RolUser.Admin)));
 
         productGroup.MapPatch("/{id}", async ([FromBody] UpdateProductDto request, [FromServices] IValidator<UpdateProductDto> validator, [FromServices] ICommandHandler<UpdateProductCommand, UpdateProductResponseDto> handler, string id) =>
         {
@@ -116,7 +118,8 @@ public static class Products
             Summary = "Updates a product",
             Description = "Updates a product in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
-        });
+        })
+        .RequireAuthorization(policy => policy.RequireRole(nameof(RolUser.Admin)));
         
         productGroup.MapDelete("/{id}", async ([FromServices] ICommandHandler<DeleteProductCommand, DeleteProductResponseDto> handler, string id) => 
         {
@@ -130,7 +133,8 @@ public static class Products
             Summary = "Deletes a product",
             Description = "Deletes a product in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
-        });
+        })
+        .RequireAuthorization(policy => policy.RequireRole(nameof(RolUser.Admin)));
 
     }
 }

@@ -98,8 +98,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -113,9 +111,11 @@ app.MapScalarApiReference(options =>
         .WithTheme(ScalarTheme.Purple)
         .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
         .WithModels(true)
-        .WithSearchHotKey("k")
-        .WithBaseServerUrl("https://enviosya-backend-production.up.railway.app");
+        .WithSearchHotKey("k");
 });
+
+app.UseCors("AllowFrontend");
+app.UseHttpsRedirection();
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();

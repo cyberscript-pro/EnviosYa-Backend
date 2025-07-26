@@ -1,6 +1,7 @@
 using EnviosYa.Application.Common;
 using EnviosYa.Application.Common.Abstractions;
 using EnviosYa.Application.Features.Cart.Queries.GetAll;
+using EnviosYa.Domain.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnviosYa.RestAPI.Endpoints;
@@ -24,7 +25,7 @@ public static class Cart
             Summary = "FindAll a cart",
             Description = "find all cart in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Cart" } }
-        });
+        }).RequireAuthorization(policy => policy.RequireRole(nameof(RolUser.Admin)));
 
     }
 }
