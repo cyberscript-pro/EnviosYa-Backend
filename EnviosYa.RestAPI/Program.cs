@@ -103,7 +103,7 @@ builder.Configuration
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -120,6 +120,14 @@ app.MapScalarApiReference(options =>
         .WithSearchHotKey("k");
 });
 
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/scalar"))
+    {
+        context.Request.Scheme = "https";
+    }
+    await next();
+});
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
