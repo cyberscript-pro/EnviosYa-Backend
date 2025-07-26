@@ -88,7 +88,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            .WithOrigins("http://localhost:3000", "https://enviosya-frontend-production.up.railway.app/")
+            .WithOrigins("https://enviosya-frontend-production.up.railway.app/")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -99,11 +99,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor
-});
-
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -120,7 +116,6 @@ app.MapScalarApiReference(options =>
 });
 
 app.UseStatusCodePages();
-app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 
 app.MapAuthEndpoints();
