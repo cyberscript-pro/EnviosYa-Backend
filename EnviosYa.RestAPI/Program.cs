@@ -91,7 +91,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(
-                    "https://enviosya-frontend-production.up.railway.app/", // <== usa tu dominio real
+                    "https://enviosya-frontend-production.up.railway.app", // <== usa tu dominio real
                     "http://localhost:3000"    // <== útil en desarrollo
                 )
                 .AllowAnyHeader()
