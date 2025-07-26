@@ -21,7 +21,6 @@ RUN dotnet publish "EnviosYa.RestAPI.csproj" -c $BUILD_CONFIGURATION -o /app/pub
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-VOLUME ["/app/Data"]
 ENTRYPOINT ["dotnet", "EnviosYa.RestAPI.dll"]
 
 #FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
