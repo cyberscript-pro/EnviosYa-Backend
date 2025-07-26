@@ -83,15 +83,20 @@ builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandVal
 builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserCommandValidator>();
 builder.Services.AddScoped<IValidator<GetCategoryProductDto>, GetFilterCategoryProductQueryValidator>();
 
+var corsPolicy = "_enviosYaCorsPolicy";
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
-    {
-        policy
-            .WithOrigins("https://enviosya-frontend-production.up.railway.app/")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
+    options.AddPolicy(name: corsPolicy,
+        policy =>
+        {
+            policy.WithOrigins(
+                    "https://enviosya-frontend-production.up.railway.app/", // <== usa tu dominio real
+                    "http://localhost:3000"    // <== útil en desarrollo
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
 });
 
 builder.Services.AddApplication();
@@ -99,7 +104,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
+app.UseCors(corsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 
