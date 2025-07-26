@@ -102,10 +102,14 @@ builder.Configuration
 
 var app = builder.Build();
 
+app.UseCors("AllowFrontend");
+//app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowFrontend");
+
 app.MapOpenApi();
+
 app.MapScalarApiReference(options =>
 {
     options
@@ -116,7 +120,6 @@ app.MapScalarApiReference(options =>
         .WithSearchHotKey("k");
 });
 
-app.UseHttpsRedirection();
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
