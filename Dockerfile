@@ -15,7 +15,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 
-ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_URLS=http://+:8081
 EXPOSE 8081
 
 ENTRYPOINT ["dotnet", "EnviosYa.RestAPI.dll"]
