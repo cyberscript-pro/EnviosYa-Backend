@@ -6,6 +6,8 @@ using EnviosYa.Application.Features.Auth.Login.Commands;
 using EnviosYa.Application.Features.Auth.Login.DTOs;
 using EnviosYa.Application.Features.Auth.Register.Commands.Create;
 using EnviosYa.Application.Features.Auth.Register.DTOs;
+using EnviosYa.Application.Features.CartItem.Commands.Create;
+using EnviosYa.Application.Features.CartItem.DTOs;
 using EnviosYa.Application.Features.Product.Commands.Create;
 using EnviosYa.Application.Features.Product.Commands.Update;
 using EnviosYa.Application.Features.Product.DTOs;
@@ -78,9 +80,10 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 });
 
 builder.Services.AddScoped<IValidator<LoginUserDto>, LoginUserCommandValidator>();
+builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserCommandValidator>();
 builder.Services.AddScoped<IValidator<CreateProductDto>, CreateProductCommandValidator>();
 builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandValidator>();
-builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserCommandValidator>();
+builder.Services.AddScoped<IValidator<CreateCartItemDto>, CreateCartItemCommandValidator>();
 builder.Services.AddScoped<IValidator<GetCategoryProductDto>, GetFilterCategoryProductQueryValidator>();
 
 var corsPolicy = "_enviosYaCorsPolicy";
@@ -91,8 +94,8 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(
-                    "https://enviosya-frontend-production.up.railway.app", // <== usa tu dominio real
-                    "http://localhost:3000"    // <== útil en desarrollo
+                    "https://enviosya-frontend-production.up.railway.app",
+                    "http://localhost:3000"
                 )
                 .AllowAnyHeader()
                 .AllowAnyMethod();

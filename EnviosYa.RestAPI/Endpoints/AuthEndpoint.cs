@@ -1,8 +1,11 @@
+using System.Security.Claims;
 using EnviosYa.Application.Common.Abstractions;
 using EnviosYa.Application.Features.Auth.Login.Commands;
 using EnviosYa.Application.Features.Auth.Login.DTOs;
+using EnviosYa.Application.Features.Auth.Login.Queries.GetUserByID;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace EnviosYa.RestAPI.Endpoints;
 
@@ -36,15 +39,28 @@ public static class AuthEndpoint
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Authentication" } }
         });
 
-        authGroup.MapGet("/me", async () =>
-        {
+        authGroup.MapGet("/me", async (HttpContext context, [FromServices] IQueryHandler<GetUserByIDQuery, GetUserByIDResponseDto> handler) =>
+            {
+                var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier) 
+                             ?? context.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
-        })
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return await Task.FromResult(Results.Unauthorized());
+                }
+
+                var result = await handler.Handle(new GetUserByIDQuery
+                {
+                    Id = Guid.Parse(userId)
+                });
+                
+                return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
+            })
         .WithOpenApi(operation => new (operation)
         {
-            Summary = "Get current freelancer",
-            Description = "Get current logged freelancer user data",
+            Summary = "Get current user",
+            Description = "Get current logged user data",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Authentication" } }
-        });
+        }).RequireAuthorization();
     }
 }

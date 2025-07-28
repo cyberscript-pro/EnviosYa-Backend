@@ -34,6 +34,8 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Role)
             .HasDefaultValue(RolUser.Cliente);
 
+        builder.Property(u => u.Cart);
+
         builder.Property(u => u.ProfilePicture);
 
         builder.Property(u => u.IsAvailable)
