@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using EnviosYa.Application.Common.Abstractions;
-using EnviosYa.Application.Features.Auth.Login.Commands;
+using EnviosYa.Application.Features.Auth.Login.Commands.Login;
+using EnviosYa.Application.Features.Auth.Login.Commands.Refresh;
 using EnviosYa.Application.Features.Auth.Login.DTOs;
 using EnviosYa.Application.Features.Auth.Login.Queries.GetUserByID;
 using FluentValidation;
@@ -36,6 +37,28 @@ public static class AuthEndpoint
         {
             Summary = "Login a user", 
             Description = "Login a user through its credentials",
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Authentication" } }
+        });
+
+        authGroup.MapPost("/refresh", async ([FromBody] RefreshTokenDto dto, [FromServices] IValidator<RefreshTokenDto> validator, [FromServices] ICommandHandler<RefreshTokenUserCommand, RefreshTokenUserResponseDto> handler) =>
+            {
+                var validateResult = await validator.ValidateAsync(dto);
+
+                if (!validateResult.IsValid)
+                {
+                    var errors = validateResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                    return Results.BadRequest(errors);
+                }
+                
+                var command = dto.MapToCommand();
+                var result = await handler.Handle(command);
+                
+                return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
+            })
+        .WithOpenApi(operation => new(operation)
+        {
+            Summary = "Refresh Token current user",
+            Description = "Refresh Token logged user",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Authentication" } }
         });
 

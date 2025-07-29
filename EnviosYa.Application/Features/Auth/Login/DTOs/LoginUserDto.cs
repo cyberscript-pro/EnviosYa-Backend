@@ -1,4 +1,4 @@
-using EnviosYa.Application.Features.Auth.Login.Commands;
+using EnviosYa.Application.Features.Auth.Login.Commands.Login;
 
 namespace EnviosYa.Application.Features.Auth.Login.DTOs;
 

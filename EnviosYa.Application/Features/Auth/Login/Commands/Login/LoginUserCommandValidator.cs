@@ -1,7 +1,7 @@
 using EnviosYa.Application.Features.Auth.Login.DTOs;
 using FluentValidation;
 
-namespace EnviosYa.Application.Features.Auth.Login.Commands;
+namespace EnviosYa.Application.Features.Auth.Login.Commands.Login;
 
 public class LoginUserCommandValidator : AbstractValidator<LoginUserDto>
 {

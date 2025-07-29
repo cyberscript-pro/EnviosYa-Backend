@@ -11,19 +11,18 @@ public class CreateUserCommandHandler(IRepository repository, IPasswordHasher ha
 {
     public async Task<Result<CreateUserResponseDto>> Handle(CreateUserCommand command, CancellationToken cancellationToken = default)
     {
-
-        if (await repository.Users.AnyAsync(u => u.Nickname == command.Nickname || u.Email == command.Email,
+        if (await repository.Users.AnyAsync(u => u.Email == command.Email,
                 cancellationToken))
         {
-            return await Task.FromResult(Result.Failure<CreateUserResponseDto>(Error.Conflict("400", "Email or Nickname already exists")));
+            return await Task.FromResult(Result.Failure<CreateUserResponseDto>(Error.Conflict("400", "Email already exists")));
         }
         
         var user = new User
         {
             FullName = command.FullName,
             Email = command.Email,
-            Nickname = command.Nickname,
             Role = command.Role,
+            Provider = command.Provider,
             Password = hasher.Hash(command.Password),
             ProfilePicture = command.ProfilePicture,
             Phone = command.Phone
@@ -39,10 +38,9 @@ public class CreateUserCommandHandler(IRepository repository, IPasswordHasher ha
         };
         var handler = new CreateCardCommandHandler(repository);
         
-        var result = await handler.Handle(commandCart);
+        var result = await handler.Handle(commandCart, cancellationToken);
 
         return await Task.FromResult(Result.Success(new CreateUserResponseDto(
-            command.Nickname,
             command.Email,
             result.Value.Id
         )));

@@ -18,7 +18,6 @@ public class GetUserByIDQueryHandler(IRepository repository) : IQueryHandler<Get
 
         return await Task.FromResult(Result.Success(new GetUserByIDResponseDto(
             FullName: user.FullName,
-            Nickname: user.Nickname,
             Email: user.Email,
             ProfilePicture: user.ProfilePicture,
             Phone: user.Phone,

@@ -2,7 +2,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 using EnviosYa.Application;
-using EnviosYa.Application.Features.Auth.Login.Commands;
+using EnviosYa.Application.Features.Auth.Login.Commands.Login;
+using EnviosYa.Application.Features.Auth.Login.Commands.Refresh;
 using EnviosYa.Application.Features.Auth.Login.DTOs;
 using EnviosYa.Application.Features.Auth.Register.Commands.Create;
 using EnviosYa.Application.Features.Auth.Register.DTOs;
@@ -18,7 +19,6 @@ using EnviosYa.Infrastructure.Authentication;
 using EnviosYa.RestAPI.Endpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 
@@ -80,6 +80,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 });
 
 builder.Services.AddScoped<IValidator<LoginUserDto>, LoginUserCommandValidator>();
+builder.Services.AddScoped<IValidator<RefreshTokenDto>, RefreshTokenUserCommandValidator>();
 builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserCommandValidator>();
 builder.Services.AddScoped<IValidator<CreateProductDto>, CreateProductCommandValidator>();
 builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandValidator>();

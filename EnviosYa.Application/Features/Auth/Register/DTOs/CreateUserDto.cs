@@ -5,7 +5,6 @@ namespace EnviosYa.Application.Features.Auth.Register.DTOs;
 
 public record CreateUserDto(
     string FullName,
-    string Nickname,
     string Email,
     string Password,
     RolUser Role,
@@ -20,7 +19,6 @@ public static class CreateUserDtoToCommand
         return new CreateUserCommand
         {
             FullName = dto.FullName,
-            Nickname = dto.Nickname,
             Email = dto.Email,
             Password = dto.Password,
             Role = dto.Role,

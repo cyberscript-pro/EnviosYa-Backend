@@ -19,25 +19,36 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.FullName)
             .IsRequired();
 
-        builder.Property(u => u.Nickname)
-            .IsRequired();
+        builder.Property(u => u.Email)
+            .IsRequired()
+            .HasMaxLength(255);
+
+        builder.HasIndex(u => u.Email).IsUnique();
+
+        builder.Property(u => u.Password)
+            .IsRequired()
+            .HasMaxLength(500);
+
+        builder.Property(u => u.Role)
+            .HasDefaultValue(RolUser.Cliente)
+            .HasMaxLength(50);
 
         builder.Property(u => u.Phone)
             .IsRequired();
 
-        builder.Property(u => u.Email)
-            .IsRequired();
-
-        builder.Property(u => u.Password)
-            .IsRequired();
-
-        builder.Property(u => u.Role)
-            .HasDefaultValue(RolUser.Cliente);
-
         builder.Property(u => u.Cart);
 
         builder.Property(u => u.ProfilePicture);
+        
+        builder.Property(u => u.Provider)
+            .HasDefaultValue(Provider.Credentials);
 
+        builder.Property(u => u.ProviderId)
+            .HasMaxLength(255);
+
+        builder.Property(u => u.IsNewUser)
+            .HasDefaultValue(true);
+        
         builder.Property(u => u.IsAvailable)
             .HasDefaultValue(true);
         
@@ -45,5 +56,9 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
             .WithOne(c => c.User)
             .HasForeignKey<Cart>(c => c.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(u => u.RefreshTokens)
+            .WithOne(rt => rt.User)
+            .HasForeignKey(rt => rt.UserId);
     }
 }

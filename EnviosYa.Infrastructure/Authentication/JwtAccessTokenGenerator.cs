@@ -10,7 +10,7 @@ using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegiste
 
 namespace EnviosYa.Infrastructure.Authentication;
 
-public class JwtTokenGenerator(IOptions<JwtSettings> jwtSettings) :  ITokenGenerator
+public class JwtAccessTokenGenerator(IOptions<JwtSettings> jwtSettings) :  IAccessTokenGenerator
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
     

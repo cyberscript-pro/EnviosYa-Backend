@@ -29,6 +29,8 @@ public static class DependencyInjection
 
         services.AddScoped<IRepository>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
-        services.AddSingleton<ITokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton<IAccessTokenGenerator, JwtAccessTokenGenerator>();
+        services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
+        services.AddSingleton<IRefreshTokenHasher, RefreshTokenHasher>();
     }
 }

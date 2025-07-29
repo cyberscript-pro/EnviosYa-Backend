@@ -1,6 +1,6 @@
 using EnviosYa.Application.Common.Abstractions;
 
-namespace EnviosYa.Application.Features.Auth.Login.Commands;
+namespace EnviosYa.Application.Features.Auth.Login.Commands.Login;
 
 public class LoginUserCommand : ICommand<LoginUserResponseDto>
 {
