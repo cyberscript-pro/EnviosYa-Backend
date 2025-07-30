@@ -144,4 +144,6 @@ app.MapProductsEndpoints();
 app.MapCartEndpoints();
 app.MapCartItemsEndpoints();
 
+app.MapMethods("{*path}", new[] { "OPTIONS" }, () => Results.Ok());
+
 app.Run();
