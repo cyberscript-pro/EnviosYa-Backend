@@ -35,5 +35,47 @@ public static class Users
             Description = "Creates a user in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Users" } }
         });
+
+        usersGroup.MapPost("/upload-profile-picture", async (HttpRequest request, IWebHostEnvironment env) =>
+            {
+                if (!request.HasFormContentType)
+                    Results.BadRequest("Debe ser multipart/form-data");
+
+                var form = await request.ReadFormAsync();
+                var file = form.Files["file"];
+
+                if (file == null || file.Length == 0)
+                    return Results.BadRequest("No se envió ningún archivo");
+
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                    return Results.BadRequest("Formato no permitido");
+
+                var fileName = $"{Guid.NewGuid()}{extension}";
+
+                var savePath = Path.Combine(env.WebRootPath ?? "wwwroot", "profile-pictures");
+
+                if (!Directory.Exists(savePath))
+                    Directory.CreateDirectory(savePath);
+
+                var filePath = Path.Combine(savePath, fileName);
+
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await file.CopyToAsync(stream);
+
+                var url = $"/profile-pictures/{fileName}";
+
+                return Results.Ok(new { url });
+            })
+            .Accepts<IFormFile>("multipart/form-data")
+            .Produces(200)
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Upload profile picture",
+                Description = "Upload profile picture in the system",
+                Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Users" } }
+            });
     }
 }

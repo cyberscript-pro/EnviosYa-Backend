@@ -122,7 +122,7 @@ var app = builder.Build();
 app.UseCors(corsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseStaticFiles();
 app.MapOpenApi();
 
 app.MapScalarApiReference(options =>
