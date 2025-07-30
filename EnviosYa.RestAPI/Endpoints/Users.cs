@@ -55,19 +55,28 @@ public static class Users
 
                 var fileName = $"{Guid.NewGuid()}{extension}";
 
-                var savePath = Path.Combine(env.WebRootPath ?? "wwwroot", "profile-pictures");
+                using var stream = file.OpenReadStream();
+                using var client = new HttpClient();
 
-                if (!Directory.Exists(savePath))
-                    Directory.CreateDirectory(savePath);
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95bG9qb3B3emhjZnBwaHpmaGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4OTk2MzEsImV4cCI6MjA2OTQ3NTYzMX0.SPA5SLyXKrM_9xbAiw0t0ShLO80Uk6NuNxUP0esO3kI");
 
-                var filePath = Path.Combine(savePath, fileName);
+                var content = new StreamContent(stream);
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                
+                var uploadUrl = $"https://oylojopwzhcfpphzfhkc.supabase.co/storage/v1/object/profile-pictures/{fileName}";
+                
+                var response = await client.PostAsync(uploadUrl, content);
 
-                await using var stream = new FileStream(filePath, FileMode.Create);
-                await file.CopyToAsync(stream);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    return Results.Problem("Error subiendo imagen: " + error);
+                }
+                
+                var publicUrl = $"https://oylojopwzhcfpphzfhkc.supabase.co/storage/v1/object/public/profile-pictures/{fileName}";
 
-                var url = $"/profile-pictures/{fileName}";
-
-                return Results.Ok(new { url });
+                return Results.Ok(new { publicUrl });
             })
             .Accepts<IFormFile>("multipart/form-data")
             .Produces(200)
