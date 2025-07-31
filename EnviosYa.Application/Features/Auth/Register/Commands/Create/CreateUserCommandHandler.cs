@@ -11,12 +11,6 @@ public class CreateUserCommandHandler(IRepository repository, IPasswordHasher ha
 {
     public async Task<Result<CreateUserResponseDto>> Handle(CreateUserCommand command, CancellationToken cancellationToken = default)
     {
-        if (await repository.Users.AnyAsync(u => u.Email == command.Email,
-                cancellationToken))
-        {
-            return await Task.FromResult(Result.Failure<CreateUserResponseDto>(Error.Conflict("400", "Email already exists")));
-        }
-        
         var user = new User
         {
             FullName = command.FullName,
