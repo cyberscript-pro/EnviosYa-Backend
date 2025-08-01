@@ -124,6 +124,7 @@ builder.Services.AddCors(options =>
                     "https://enviosya-frontend-production.up.railway.app",
                     "http://localhost:3000"
                 )
+                .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
