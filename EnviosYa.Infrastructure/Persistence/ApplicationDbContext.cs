@@ -20,5 +20,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasOne(u => u.Cart)
             .WithOne(c => c.User)
             .HasForeignKey<Cart>(c => c.UserId);
+        
+        modelBuilder.Entity<Cart>()
+            .HasMany(c => c.Items)
+            .WithOne(i => i.Cart)
+            .HasForeignKey(i => i.CartId);
     }
 }

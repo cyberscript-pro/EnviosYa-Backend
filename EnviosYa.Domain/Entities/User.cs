@@ -21,6 +21,7 @@ public class User : AggregateRoot<Guid>
     public string? ProviderId { get; set; }
     public bool IsNewUser { get; set; } = true;
     public bool IsAvailable { get; set; } = true;
+    public bool IsVerifiedEmail { get; set; } = false;
     
     public Cart? Cart { get; set; }
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();

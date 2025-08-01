@@ -6,7 +6,7 @@ namespace EnviosYa.Application.Features.Cart.Queries.GetAll;
 public sealed record GetAllCartResponseDto(
     Guid Id,
     Guid UserId,
-    List<Domain.Entities.CartItem> CartItems
+    List<Domain.Entities.CartItem> Items
     );
 
 public class GetAllCartToResponse

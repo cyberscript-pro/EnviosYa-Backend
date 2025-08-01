@@ -34,6 +34,19 @@ builder.Services.AddAuthentication(options =>
 {
     var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Cookies["access_token"];
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
+    
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -43,7 +56,8 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSettings!.Issuer,
         ValidAudience = jwtSettings.Audience,
         IssuerSigningKey = 
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
+        ClockSkew = TimeSpan.Zero
     };
 })
 .AddCookie()
@@ -85,6 +99,7 @@ builder.Services.AddOpenApi(options =>
         return Task.CompletedTask;
     });
 });
+
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -122,7 +137,6 @@ var app = builder.Build();
 app.UseCors(corsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseStaticFiles();
 app.MapOpenApi();
 
 app.MapScalarApiReference(options =>
@@ -143,7 +157,5 @@ app.MapUserEndpoints();
 app.MapProductsEndpoints();
 app.MapCartEndpoints();
 app.MapCartItemsEndpoints();
-
-app.MapMethods("{*path}", new[] { "OPTIONS" }, () => Results.Ok());
 
 app.Run();

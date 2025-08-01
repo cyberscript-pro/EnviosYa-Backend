@@ -37,7 +37,7 @@
 
     <ItemGroup>
       <Folder Include="Middleware\" />
-      <Folder Include="wwwroot\profile-pictures\" />
+      <Folder Include="wwwroot\" />
     </ItemGroup>
 
 </Project>

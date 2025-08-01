@@ -18,8 +18,6 @@ public class CartEntityConfiguration : IEntityTypeConfiguration<Cart>
         builder.Property(c => c.UserId)
             .IsRequired();
 
-        builder.Property(c => c.Items);
-
         builder.HasOne(c => c.User)
             .WithOne(u => u.Cart)
             .HasForeignKey<Cart>(c => c.UserId)

@@ -3,24 +3,25 @@ using EnviosYa.Application.Features.CartItem.Commands.Create;
 namespace EnviosYa.Application.Features.CartItem.DTOs;
 
 public record CreateCartItemDto(
-    string CartId,
     string ProductoId,
-    int Cantidad,
-    Domain.Entities.Product Product,
-    Domain.Entities.Cart Cart
+    int Cantidad
+    );
+
+public record CreateCartItemDtoToCommand(
+    string UserId,
+    string ProductoId,
+    int Cantidad
     );
 
 public static class CreateCartItemToCommand
 {
-    public static CreateCartItemCommand MapToCommand(this CreateCartItemDto dto)
+    public static CreateCartItemCommand MapToCommand(this CreateCartItemDtoToCommand dto)
     {
         return new CreateCartItemCommand
         {
-            CartId = dto.CartId,
+            UserId = dto.UserId,
             ProductId = dto.ProductoId,
             Cantidad = dto.Cantidad,
-            Product = dto.Product,
-            Cart = dto.Cart
         };
     }
 }

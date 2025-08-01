@@ -52,6 +52,9 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.IsAvailable)
             .HasDefaultValue(true);
         
+        builder.Property(u => u.IsVerifiedEmail)
+            .HasDefaultValue(false);
+        
         builder.HasOne(u => u.Cart)
             .WithOne(c => c.User)
             .HasForeignKey<Cart>(c => c.UserId)

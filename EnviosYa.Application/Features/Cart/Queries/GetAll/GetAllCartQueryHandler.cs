@@ -9,7 +9,7 @@ public class GetAllCartQueryHandler(IRepository repository) : IQueryHandler<GetA
 {
     public async Task<Result<List<GetAllCartResponseDto>>> Handle(GetAllCartQuery query, CancellationToken cancellationToken = default)
     {
-        var carts = await repository.Carts.Where(c => c.IsAvailable).ToListAsync(cancellationToken);
+        var carts = await repository.Carts.Include(c => c.Items).Where(c => c.IsAvailable).ToListAsync(cancellationToken);
 
         var response = carts.Select(GetAllCartToResponse.MapToResponse).ToList();
 

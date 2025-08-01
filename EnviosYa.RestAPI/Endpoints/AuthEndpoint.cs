@@ -22,7 +22,7 @@ public static class AuthEndpoint
             .WithTags("Authentication")
             .WithOpenApi();
 
-        authGroup.MapPost("/login", async ([FromBody] LoginUserDto dto, [FromServices] IValidator<LoginUserDto> validator, [FromServices] ICommandHandler<LoginUserCommand, LoginUserResponseDto> handler) =>
+        authGroup.MapPost("/login", async ([FromBody] LoginUserDto dto, HttpResponse response, [FromServices] IValidator<LoginUserDto> validator, [FromServices] ICommandHandler<LoginUserCommand, LoginUserResponseDto> handler) =>
             {
                 var validationResult = await validator.ValidateAsync(dto);
 
@@ -35,7 +35,23 @@ public static class AuthEndpoint
                 var command = dto.MapToCommand();
                 var result = await handler.Handle(command);
                 
-                return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
+                response.Cookies.Append("access_token", result.Value.AccessToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddHours(1)
+                });
+                
+                response.Cookies.Append("refresh_token", result.Value.RefreshToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddDays(7)
+                });
+                
+                return result.IsSuccess ? Results.Ok(new { Logged = true }) : Results.BadRequest(result.Error);
             })
         .WithOpenApi(operation => new (operation)
         {
@@ -44,9 +60,14 @@ public static class AuthEndpoint
             Tags = new List<OpenApiTag> { new() { Name = "Authentication" } }
         });
 
-        authGroup.MapPost("/refresh", async ([FromBody] RefreshTokenDto dto, [FromServices] IValidator<RefreshTokenDto> validator, [FromServices] ICommandHandler<RefreshTokenUserCommand, RefreshTokenUserResponseDto> handler) =>
+        authGroup.MapPost("/refresh", async (HttpRequest request, HttpResponse response, [FromServices] IValidator<RefreshTokenDto> validator, [FromServices] ICommandHandler<RefreshTokenUserCommand, RefreshTokenUserResponseDto> handler) =>
             {
-                var validateResult = await validator.ValidateAsync(dto);
+                var refreshToken = request.Cookies["refresh_token"];
+                
+                if (string.IsNullOrWhiteSpace(refreshToken))
+                    return Results.Unauthorized();
+                
+                var validateResult = await validator.ValidateAsync(new RefreshTokenDto(refreshToken));
 
                 if (!validateResult.IsValid)
                 {
@@ -54,10 +75,26 @@ public static class AuthEndpoint
                     return Results.BadRequest(errors);
                 }
                 
-                var command = dto.MapToCommand();
+                var command = new RefreshTokenDto(refreshToken).MapToCommand();
                 var result = await handler.Handle(command);
                 
-                return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
+                response.Cookies.Append("access_token", result.Value.AccessToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddHours(1)
+                });
+                
+                response.Cookies.Append("refresh_token", result.Value.RefreshToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddDays(7)
+                });
+                
+                return result.IsSuccess ? Results.Ok(new { RefreshToken = true }) : Results.BadRequest(result.Error);
             })
         .WithOpenApi(operation => new(operation)
         {

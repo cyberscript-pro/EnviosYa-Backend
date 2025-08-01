@@ -31,7 +31,7 @@ public static class Products
             Summary = "FindAll a products",
             Description = "find all products in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
-        });
+        }).RequireAuthorization();
 
         productGroup.MapGet("/{id}", async ([FromServices] IQueryHandler<GetOneProductQuery, GetOneProductResponseDto> handler, string id) =>
             {
@@ -49,7 +49,7 @@ public static class Products
             Summary = "Find a product",
             Description = "Find a product in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
-        });
+        }).RequireAuthorization();
 
         productGroup.MapGet("/filter/{category}", async ([FromServices] IValidator<GetCategoryProductDto> validator,[FromServices] IQueryHandler<GetFilterCategoryProductQuery,List<GetFilterCategoryProductResponseDto>> handler, string category) =>
         {
@@ -73,7 +73,7 @@ public static class Products
             Summary = "Filter a product of categories",
             Description = "Filter a product of categories in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
-        });;
+        }).RequireAuthorization();
 
         productGroup.MapPost("/", async ([FromBody] CreateProductDto request, [FromServices] IValidator<CreateProductDto> validator, [FromServices] ICommandHandler<CreateProductCommand, CreateProductResponseDto> handler) =>
         {
