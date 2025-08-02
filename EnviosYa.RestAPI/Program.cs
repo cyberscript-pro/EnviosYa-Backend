@@ -60,7 +60,13 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 })
-.AddCookie()
+.AddCookie(options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.None; 
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.Name = "access_token";
+    })
 .AddGoogle("Google", options =>
 {
     options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
@@ -72,6 +78,23 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminRole", policy => policy.RequireClaim(ClaimTypes.Role, nameof(RolUser.Admin)));
     options.AddPolicy("ClienteRole", policy => policy.RequireClaim(ClaimTypes.Role, nameof(RolUser.Cliente)));
+});
+
+const string corsPolicy = "_enviosYaCorsPolicy";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicy,
+        policy =>
+        {
+            policy.WithOrigins(
+                    "https://enviosya-frontend-production.up.railway.app",
+                    "http://localhost:3000"
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
 });
 
 builder.Services.AddOpenApi(options =>
@@ -112,23 +135,6 @@ builder.Services.AddScoped<IValidator<CreateProductDto>, CreateProductCommandVal
 builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandValidator>();
 builder.Services.AddScoped<IValidator<CreateCartItemDto>, CreateCartItemCommandValidator>();
 builder.Services.AddScoped<IValidator<GetCategoryProductDto>, GetFilterCategoryProductQueryValidator>();
-
-var corsPolicy = "_enviosYaCorsPolicy";
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: corsPolicy,
-        policy =>
-        {
-            policy.WithOrigins(
-                    "https://enviosya-frontend-production.up.railway.app",
-                    "http://localhost:3000"
-                )
-                .AllowCredentials()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
