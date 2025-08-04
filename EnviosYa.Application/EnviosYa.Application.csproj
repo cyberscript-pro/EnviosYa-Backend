@@ -10,7 +10,6 @@
       <Folder Include="Features\Auth\Register\Commands\DeleteAccount\" />
       <Folder Include="Features\Auth\Register\Commands\Update\" />
       <Folder Include="Features\Auth\Register\Queries\" />
-      <Folder Include="Features\CartItem\Commands\Delete\" />
       <Folder Include="Features\CartItem\Commands\Update\" />
       <Folder Include="Features\CartItem\Queries\GetOne\" />
       <Folder Include="Features\Cart\DTOs\" />

@@ -10,9 +10,9 @@ public class GetAllProductQueryHandler(IRepository repository) : IQueryHandler<G
 {
     public async Task<Result<List<GetAllProductResponseDto>>> Handle(GetAllProductQuery query, CancellationToken cancellationToken = default)
     {
-        var products = await repository.Products.Where(p => p.IsAvailable).OrderBy(p => p.Name).ToListAsync(cancellationToken);
-
-        var response = products.Select(GetAllProductToResponse.MapToResponse).ToList();
+        // var products = await repository.Products.Where(p => p.IsAvailable).OrderBy(p => p.Name).ToListAsync(cancellationToken);
+        //products.Select(GetAllProductToResponse.MapToResponse).ToList();
+        var response = new List<GetAllProductResponseDto>();
 
         return await Task.FromResult(Result.Success(response));
     }

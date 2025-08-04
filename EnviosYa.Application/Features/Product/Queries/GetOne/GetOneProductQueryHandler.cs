@@ -17,15 +17,7 @@ public class GetOneProductQueryHandler(IRepository repository) : IQueryHandler<G
         }
 
         return await Task.FromResult(
-            Result.Success(new GetOneProductResponseDto(
-                product.Id,
-                product.Name,
-                product.Description,
-                product.Price,
-                product.Stock,
-                product.Category,
-                product.ImagesUrls
-            )
+            Result.Success(GetOneProductToResponse.MapToResponse(product)
         ));
     }
 }

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using EnviosYa.Application.Features.Auth.Register.DTOs;
 using EnviosYa.Domain.Common;
 using FluentValidation;

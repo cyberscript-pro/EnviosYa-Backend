@@ -8,7 +8,6 @@ namespace EnviosYa.Application.Features.Product.DTOs;
 
 public record CreateProductDto( 
     string Name,
-    string Description,
     double Price,
     int Stock,
     string Category,
@@ -24,7 +23,6 @@ public static class CreateProductDtoToCommand
         return new CreateProductCommand
         {
             Name = dto.Name,
-            Description = dto.Description,
             Price = dto.Price,
             Stock = dto.Stock,
             Category = category,

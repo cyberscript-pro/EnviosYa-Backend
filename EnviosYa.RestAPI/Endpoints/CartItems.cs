@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using EnviosYa.Application.Common.Abstractions;
 using EnviosYa.Application.Features.CartItem.Commands.Create;
+using EnviosYa.Application.Features.CartItem.Commands.Delete;
 using EnviosYa.Application.Features.CartItem.DTOs;
 using EnviosYa.Application.Features.CartItem.Queries.GetAll;
 using FluentValidation;
@@ -57,6 +58,41 @@ public static class CartItems
         {
             Summary = "Creates a cart item",
             Description = "Creates a cart item in the system",
+            Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "CartItems" } }
+        }).RequireAuthorization();
+
+        itemsGroup.MapDelete("/{id}",
+            async(HttpContext context, [FromServices] IValidator <DeleteCartItemDto> validator, [FromServices] ICommandHandler<DeleteCartItemCommand, DeleteCartItemResponseDto> handler, string id) =>
+        {
+            var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier) 
+                         ?? context.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            
+            if (string.IsNullOrEmpty(userId))
+            {
+                return await Task.FromResult(Results.Unauthorized());
+            }
+            
+            var validationResult = await validator.ValidateAsync(new DeleteCartItemDto(id, userId));
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                return Results.BadRequest(errors);
+            }
+
+            var command = new DeleteCartItemCommand
+            {
+                Id = Guid.Parse(id)
+            };
+            
+            var result = await handler.Handle(command);
+            
+            return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
+        })
+        .WithOpenApi(operation => new(operation)
+        {
+            Summary = "Deletes a cart item",
+            Description = "Deletes a cart item in the system",
             Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "CartItems" } }
         }).RequireAuthorization();
     }
