@@ -19,7 +19,7 @@ public class Product : AggregateRoot<Guid>
     public bool IsAvailable { get; set; } = true;
     
     public required Guid CategoryId { get; set; }
-    public required Category Category { get; set; } = default!;
+    public Category Category { get; set; } = default!;
     public ICollection<string> ProductImages { get; set; } = new List<string>();
     public ICollection<ProductTranslations> Translations { get; set; } = new List<ProductTranslations>();
     public ICollection<ProductSpecification> Specifications { get; set; } = new List<ProductSpecification>(); 

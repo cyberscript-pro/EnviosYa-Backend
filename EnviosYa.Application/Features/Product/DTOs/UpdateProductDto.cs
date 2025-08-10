@@ -7,8 +7,8 @@ public record UpdateProductDto(
     string Name,
     double Price,
     int Stock,
-    string Category,
-    List<string> ImagesUrls
+    string CategoryId,
+    List<string> ProductImages
     );
 
 
@@ -16,16 +16,14 @@ public static class UpdateProductDtoToCommand
 {
     public static UpdateProductCommand ToCommand(this UpdateProductDto dto, Guid id)
     {
-        CategoryMapper.TryParseCategory(dto.Category, out var category);
-        
         return new UpdateProductCommand
         {
             Id = id,
             Name = dto.Name,
             Price = dto.Price,
             Stock = dto.Stock,
-            Category = category,
-            ImagesUrls = dto.ImagesUrls
+            CategoryId = Guid.Parse(dto.CategoryId),
+            ProductImages = dto.ProductImages
         };
     }
 }

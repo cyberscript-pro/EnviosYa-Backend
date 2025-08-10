@@ -11,10 +11,10 @@ public class CategoryTranslations : AggregateRoot<Guid>
     {}
     
     public required Guid CategoryId { get; set; }
-    public required Category Category { get; set; }
+    public Category Category { get; set; } = default!;
     
     public required Guid LanguageId { get; set; }
-    public required Language Language { get; set; }
+    public Language Language { get; set; } = default!;
     
     public required string Name { get; set; }
     public bool IsAvailable { get; set; } = true;

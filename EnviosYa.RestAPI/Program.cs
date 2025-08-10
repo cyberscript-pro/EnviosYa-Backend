@@ -141,8 +141,10 @@ app.UseHttpsRedirection();
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
-app.MapProductsEndpoints();
 app.MapCartEndpoints();
 app.MapCartItemsEndpoints();
+app.MapProductsEndpoints();
+app.MapCategoryEndpoints();
+app.MapLanguageEndpoints();
 
 app.Run();

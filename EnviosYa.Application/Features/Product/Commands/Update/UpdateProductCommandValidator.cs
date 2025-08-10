@@ -18,15 +18,15 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductDto>
         RuleFor(x => x.Stock)
             .GreaterThanOrEqualTo(0).WithMessage("Stock must be greater than or equal to 0.");
         
-        RuleFor(x => x.Category)
-            .Must(cat => CategoryMapper.TryParseCategory(cat, out var category)).WithMessage("Category must be a valid category.");
+        // RuleFor(x => x.Category)
+        //     .Must(cat => CategoryMapper.TryParseCategory(cat, out var category)).WithMessage("Category must be a valid category.");
         
-        RuleFor(x => x.ImagesUrls)
-            .Must(urls => urls.Count < 5).WithMessage("ImagesUrls must contain at least 5 urls.")
+        RuleFor(x => x.ProductImages)
+            .Must(urls => urls.Count < 5).WithMessage("ProductImages must contain at least 5 urls.")
             .ForEach(url => 
                 url
-                    .NotEmpty().WithMessage("ImageUrl is not empty.")
-                    .Must(IsValidUrl).WithMessage("ImageUrl is not valid.")
+                    .NotEmpty().WithMessage("ProductImage is not empty.")
+                    .Must(IsValidUrl).WithMessage("ProductImage is not valid.")
             );
         
     }

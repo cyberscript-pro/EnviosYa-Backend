@@ -7,10 +7,18 @@ using EnviosYa.Application.Features.Auth.Register.DTOs;
 using EnviosYa.Application.Features.CartItem.Commands.Create;
 using EnviosYa.Application.Features.CartItem.Commands.Delete;
 using EnviosYa.Application.Features.CartItem.DTOs;
+using EnviosYa.Application.Features.Category.Command.Create;
+using EnviosYa.Application.Features.Category.Command.CreateTranslation;
+using EnviosYa.Application.Features.Category.DTOs;
+using EnviosYa.Application.Features.Language;
+using EnviosYa.Application.Features.Language.Commands.Create;
+using EnviosYa.Application.Features.Language.DTOs;
 using EnviosYa.Application.Features.Product.Commands.Create;
 using EnviosYa.Application.Features.Product.Commands.Update;
 using EnviosYa.Application.Features.Product.DTOs;
 using EnviosYa.Application.Features.Product.Queries.GetFilterCategory;
+using EnviosYa.Application.Features.ProductTranslations.Command.Create;
+using EnviosYa.Application.Features.ProductTranslations.DTOs;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -48,6 +56,10 @@ public static class DependencyInjection
         services.AddScoped<IValidator<CreateCartItemDto>, CreateCartItemCommandValidator>();
         services.AddScoped<IValidator<DeleteCartItemDto>, DeleteCartItemCommandValidator>();
         services.AddScoped<IValidator<GetCategoryProductDto>, GetFilterCategoryProductQueryValidator>();
+        services.AddScoped<IValidator<CreateLanguageDto>, CreateLanguageCommandValidator>();
+        services.AddScoped<IValidator<CreateCategoryDto>, CreateCategoryCommandValidator>();
+        services.AddScoped<IValidator<CreateCategoryTranslationDto>, CreateCategoryTranslationsCommandValidator>();
+        services.AddScoped<IValidator<CreateProductTranslationDto>, CreateProductTranslationsCommandValidator>();
 
         return services;
     }

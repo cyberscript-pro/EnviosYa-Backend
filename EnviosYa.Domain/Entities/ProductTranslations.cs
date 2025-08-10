@@ -12,10 +12,10 @@ public class ProductTranslations : AggregateRoot<Guid>
 
     
     public required Guid ProductId { get; set; }
-    public required Product Product { get; set; }
+    public Product Product { get; set; } = default!;
     
     public required Guid LanguageId { get; set; }
-    public required Language Language { get; set; }
+    public Language Language { get; set; } = default!;
     
     public required string Name { get; set; }
     public string? Description { get; set; }

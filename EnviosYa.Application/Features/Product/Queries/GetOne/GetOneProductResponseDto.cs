@@ -6,7 +6,7 @@ public sealed record GetOneProductResponseDto(
     Guid Id,
     double Price,
     int Stock,
-    string Category,
+    //string Category,
     List<string> Images
 );
 
@@ -18,7 +18,7 @@ public static class GetOneProductToResponse
             product.Id,
             product.Price,
             product.Stock,
-            product.Category.Name,
+            //product.Category.Name,
             product.ProductImages.ToList()
         );
     }

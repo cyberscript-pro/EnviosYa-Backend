@@ -13,6 +13,7 @@
       <Folder Include="Features\CartItem\Commands\Update\" />
       <Folder Include="Features\CartItem\Queries\GetOne\" />
       <Folder Include="Features\Cart\DTOs\" />
+      <Folder Include="Features\ProductReviews\Commands\Create\" />
     </ItemGroup>
 
     <ItemGroup>
