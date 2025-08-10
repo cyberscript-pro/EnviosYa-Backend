@@ -8,8 +8,8 @@ public class GetFilterCategoryProductQueryValidator : AbstractValidator<GetCateg
 {
     public GetFilterCategoryProductQueryValidator()
     {
-        RuleFor(p => p.Category)
-            .NotEmpty().WithMessage("Category is required.")
-            .Must(cat => CategoryMapper.TryParseCategory(cat, out var category)).WithMessage("Category must be a valid category.");
+        // RuleFor(p => p.Category)
+        //     .NotEmpty().WithMessage("Category is required.")
+        //     .Must(cat => CategoryMapper.TryParseCategory(cat, out var category)).WithMessage("Category must be a valid category.");
     }
 }

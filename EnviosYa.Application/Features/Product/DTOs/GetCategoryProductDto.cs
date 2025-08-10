@@ -10,11 +10,11 @@ public static class GetCategoryProductToQuery
 {
     public static GetFilterCategoryProductQuery ToCommand(this GetCategoryProductDto dto)
     {
-        CategoryMapper.TryParseCategory(dto.Category, out var category);
-        
+        // CategoryMapper.TryParseCategory(dto.Category, out var category);
+        //
         return new GetFilterCategoryProductQuery
         {
-            Category = category,
+            //Category = category,
         };
     }
 }

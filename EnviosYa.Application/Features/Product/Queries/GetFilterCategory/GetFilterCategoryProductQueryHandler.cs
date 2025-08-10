@@ -9,10 +9,10 @@ public class GetFilterCategoryProductQueryHandler(IRepository repository) : IQue
 {
     public async Task<Result<List<GetFilterCategoryProductResponseDto>>> Handle(GetFilterCategoryProductQuery query, CancellationToken cancellationToken = default)
     {
-        var products = await repository.Products.Where(p => p.IsAvailable && p.Category == query.Category)
-            .OrderBy(p => p.Name).ToListAsync(cancellationToken);
-        
-        var response = products.Select(GetFilterCategoryProductToResponse.MapToResponse).ToList(); 
+        // var products = await repository.Products.Where(p => p.IsAvailable && p.Category == query.Category)
+        //     .OrderBy(p => p.Name).ToListAsync(cancellationToken);
+        //products.Select(GetFilterCategoryProductToResponse.MapToResponse).ToList(); 
+        var response = new List<GetFilterCategoryProductResponseDto>();
         
         return await Task.FromResult(Result.Success(response));
     }

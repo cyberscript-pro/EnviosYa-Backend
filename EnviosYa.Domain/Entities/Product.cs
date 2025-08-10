@@ -11,11 +11,18 @@ public class Product : AggregateRoot<Guid>
     public Product(Guid id) : base(id)
     {}
     
-    public required string Name { get; set; } = default!;
-    public string Description { get; set; }  = default!;
+    public required double DiscountPrice { get; set; }
     public required double Price { get; set; }
     public required int Stock { get; set; }
-    public required CategoryProduct Category { get; set; }
-    public required List<string> ImagesUrls { get; set; }
+    public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public required DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public bool IsAvailable { get; set; } = true;
+    
+    public required Guid CategoryId { get; set; }
+    public Category Category { get; set; } = default!;
+    public ICollection<string> ProductImages { get; set; } = new List<string>();
+    public ICollection<ProductTranslations> Translations { get; set; } = new List<ProductTranslations>();
+    public ICollection<ProductSpecification> Specifications { get; set; } = new List<ProductSpecification>(); 
+    public ICollection<ProductTags> Tags { get; set; }  = new List<ProductTags>();
+    public ICollection<ProductReviews> Reviews { get; set; }  = new List<ProductReviews>();
 }

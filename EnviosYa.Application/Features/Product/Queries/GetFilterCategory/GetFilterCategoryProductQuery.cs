@@ -5,5 +5,5 @@ namespace EnviosYa.Application.Features.Product.Queries.GetFilterCategory;
 
 public class GetFilterCategoryProductQuery : IQuery<List<GetFilterCategoryProductResponseDto>>
 {
-    public required CategoryProduct Category { get; init; }
+   // public required CategoryProduct Category { get; init; }
 }

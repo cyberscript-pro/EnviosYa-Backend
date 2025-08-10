@@ -4,11 +4,9 @@ namespace EnviosYa.Application.Features.Product.Queries.GetOne;
 
 public sealed record GetOneProductResponseDto(
     Guid Id,
-    string Name,
-    string Description,
     double Price,
     int Stock,
-    CategoryProduct Category,
+    //string Category,
     List<string> Images
 );
 
@@ -18,12 +16,10 @@ public static class GetOneProductToResponse
     {
         return new GetOneProductResponseDto(
             product.Id,
-            product.Name,
-            product.Description,
             product.Price,
             product.Stock,
-            product.Category,
-            product.ImagesUrls
+            //product.Category.Name,
+            product.ProductImages.ToList()
         );
     }
 }

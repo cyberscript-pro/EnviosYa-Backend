@@ -6,6 +6,8 @@ using EnviosYa.Application.Features.Product.DTOs;
 using EnviosYa.Application.Features.Product.Queries.GetAll;
 using EnviosYa.Application.Features.Product.Queries.GetFilterCategory;
 using EnviosYa.Application.Features.Product.Queries.GetOne;
+using EnviosYa.Application.Features.ProductTranslations.Command.Create;
+using EnviosYa.Application.Features.ProductTranslations.DTOs;
 using EnviosYa.Domain.Constants;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +22,12 @@ public static class Products
             .WithTags("Products")
             .WithOpenApi();
 
-        productGroup.MapGet("/", async ([FromServices] IQueryHandler<GetAllProductQuery, List<GetAllProductResponseDto>> handler) =>
+        productGroup.MapGet("/language/{lang}", async ([FromServices] IQueryHandler<GetAllProductQuery, List<GetAllProductResponseDto>> handler, string lang) =>
         {
-            var result = await handler.Handle(new GetAllProductQuery());
+            var result = await handler.Handle(new GetAllProductQuery
+            {
+                Language = lang
+            });
 
             return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
         })
@@ -136,5 +141,28 @@ public static class Products
         })
         .RequireAuthorization(policy => policy.RequireRole(nameof(RolUser.Admin)));
 
+        
+        productGroup.MapPost("/translation", async ([FromBody] CreateProductTranslationDto request, [FromServices] IValidator<CreateProductTranslationDto> validator, [FromServices] ICommandHandler<CreateProductTranslationsCommand, CreateProductTranslationsResponseDto> handler) =>
+            {
+                var validationResult = await validator.ValidateAsync(request);
+
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                    return Results.BadRequest(errors);
+                }
+            
+                var command = request.MapToCommand();
+                var result = await handler.Handle( command );
+
+                return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
+            })
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Creates a product translation",
+                Description = "Creates a product translation in the system",
+                Tags = new List<Microsoft.OpenApi.Models.OpenApiTag> { new() { Name = "Products" } }
+            })
+            .RequireAuthorization(policy => policy.RequireRole(nameof(RolUser.Admin)));
     }
 }

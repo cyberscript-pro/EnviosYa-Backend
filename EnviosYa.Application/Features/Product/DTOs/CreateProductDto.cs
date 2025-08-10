@@ -6,29 +6,31 @@ using EnviosYa.Domain.Constants;
 
 namespace EnviosYa.Application.Features.Product.DTOs;
 
-public record CreateProductDto( 
+public record CreateProductDto(
+    string LanguageId,
+    string CategoryId,
     string Name,
     string Description,
+    double DiscountPrice,
     double Price,
     int Stock,
-    string Category,
-    List<string> ImagesUrls
+    List<string> ProductImages
 );
 
 public static class CreateProductDtoToCommand
 {
     public static CreateProductCommand ToCommand(this CreateProductDto dto)
     {
-        CategoryMapper.TryParseCategory(dto.Category, out var category);
-        
         return new CreateProductCommand
         {
+            LanguageId = Guid.Parse(dto.LanguageId),
             Name = dto.Name,
             Description = dto.Description,
+            DiscountPrice = dto.DiscountPrice,
             Price = dto.Price,
             Stock = dto.Stock,
-            Category = category,
-            ImagesUrls = dto.ImagesUrls
+            CategoryId = Guid.Parse(dto.CategoryId),
+            ProductImages = dto.ProductImages
         };
     }
 }

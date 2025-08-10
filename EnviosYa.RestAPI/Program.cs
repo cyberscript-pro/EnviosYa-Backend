@@ -2,22 +2,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 using EnviosYa.Application;
-using EnviosYa.Application.Features.Auth.Login.Commands.Login;
-using EnviosYa.Application.Features.Auth.Login.Commands.Refresh;
-using EnviosYa.Application.Features.Auth.Login.DTOs;
-using EnviosYa.Application.Features.Auth.Register.Commands.Create;
-using EnviosYa.Application.Features.Auth.Register.DTOs;
-using EnviosYa.Application.Features.CartItem.Commands.Create;
-using EnviosYa.Application.Features.CartItem.DTOs;
-using EnviosYa.Application.Features.Product.Commands.Create;
-using EnviosYa.Application.Features.Product.Commands.Update;
-using EnviosYa.Application.Features.Product.DTOs;
-using EnviosYa.Application.Features.Product.Queries.GetFilterCategory;
 using EnviosYa.Domain.Constants;
 using EnviosYa.Infrastructure;
 using EnviosYa.Infrastructure.Authentication;
 using EnviosYa.RestAPI.Endpoints;
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -128,14 +116,6 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.AddScoped<IValidator<LoginUserDto>, LoginUserCommandValidator>();
-builder.Services.AddScoped<IValidator<RefreshTokenDto>, RefreshTokenUserCommandValidator>();
-builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserCommandValidator>();
-builder.Services.AddScoped<IValidator<CreateProductDto>, CreateProductCommandValidator>();
-builder.Services.AddScoped<IValidator<UpdateProductDto>, UpdateProductCommandValidator>();
-builder.Services.AddScoped<IValidator<CreateCartItemDto>, CreateCartItemCommandValidator>();
-builder.Services.AddScoped<IValidator<GetCategoryProductDto>, GetFilterCategoryProductQueryValidator>();
-
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -161,8 +141,10 @@ app.UseHttpsRedirection();
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
-app.MapProductsEndpoints();
 app.MapCartEndpoints();
 app.MapCartItemsEndpoints();
+app.MapProductsEndpoints();
+app.MapCategoryEndpoints();
+app.MapLanguageEndpoints();
 
 app.Run();

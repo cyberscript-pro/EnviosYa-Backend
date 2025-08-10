@@ -9,30 +9,30 @@ public class GetOneCartQueryHandler(IRepository repository): IQueryHandler<GetOn
 {
     public async Task<Result<GetOneCartResponseDto>> Handle(GetOneCartQuery query, CancellationToken cancellationToken = default)
     {
-        var cart = await repository.Carts
-            .Where(c => c.UserId == query.Id && c.IsAvailable)
-            .Select(c => new GetOneCartResponseDto(
-                c.Id,
-                c.UserId,
-                c.Items.Select(i => new CartItemDto(
-                    i.Id,
-                    i.ProductId,
-                    i.Cantidad,
-                    i.Producto == null ? null : new ProductDto(
-                        i.Producto.Id,
-                        i.Producto.Name,
-                        i.Producto.Price,
-                        i.Producto.Category
-                    )
-                )).ToList()
-            ))
-            .FirstOrDefaultAsync(cancellationToken);
+        // var cart = await repository.Carts
+        //     .Where(c => c.UserId == query.Id && c.IsAvailable)
+        //     .Select(c => new GetOneCartResponseDto(
+        //         c.Id,
+        //         c.UserId,
+        //         c.Items.Where(i => i.IsAvailable).Select(i => new CartItemDto(
+        //             i.Id,
+        //             i.ProductId,
+        //             i.Cantidad,
+        //             i.Producto == null ? null : new ProductDto(
+        //                 i.Producto.Id,
+        //                 i.Producto.Translations.Name,
+        //                 i.Producto.Price,
+        //                 i.Producto.Category
+        //             )
+        //         )).ToList()
+        //     ))
+        //     .FirstOrDefaultAsync(cancellationToken);
+        //
+        // if (cart is null)
+        // {
+        //     return await Task.FromResult(Result.Failure<GetOneCartResponseDto>(Error.NotFound("400", "Cart not found")));
+        // }
 
-        if (cart is null)
-        {
-            return await Task.FromResult(Result.Failure<GetOneCartResponseDto>(Error.NotFound("400", "Cart not found")));
-        }
-
-        return await Task.FromResult(Result.Success(cart));
+        return await Task.FromResult(Result.Failure<GetOneCartResponseDto>(Error.Conflict("400", "No implementado")));
     }
 }

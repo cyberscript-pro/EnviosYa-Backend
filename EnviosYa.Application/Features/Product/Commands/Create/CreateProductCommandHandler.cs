@@ -1,6 +1,7 @@
 using EnviosYa.Application.Common;
 using Microsoft.EntityFrameworkCore;
 using EnviosYa.Application.Common.Abstractions;
+using EnviosYa.Application.Features.ProductTranslations.Command.Create;
 using EnviosYa.Domain.Common;
 
 namespace EnviosYa.Application.Features.Product.Commands.Create;
@@ -10,7 +11,7 @@ public class CreateProductCommandHandler(IRepository repository) : ICommandHandl
     public async Task<Result<CreateProductResponseDto>> Handle(CreateProductCommand command,
         CancellationToken cancellationToken = default)
     {
-        var productExits = await repository.Products.AnyAsync(p => p.Name == command.Name && p.IsAvailable, cancellationToken);
+        var productExits = await repository.ProductTranslations.AnyAsync(p => p.Name == command.Name && p.IsAvailable, cancellationToken);
         
         if (productExits)
         {
@@ -21,20 +22,34 @@ public class CreateProductCommandHandler(IRepository repository) : ICommandHandl
         
         var product = new Domain.Entities.Product
         {
-        Name = command.Name,
-        Description = command.Description,
-        Price = command.Price,
-        Stock = command.Stock,
-        Category = command.Category,
-        ImagesUrls = command.ImagesUrls,
-        IsAvailable = true
+            DiscountPrice = command.DiscountPrice,
+            Price = command.Price,
+            Stock = command.Stock,
+            CategoryId = command.CategoryId,
+            ProductImages = command.ProductImages,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            IsAvailable = true
         };
         
         repository.Products.Add(product);
         await repository.SaveChangesAsync(cancellationToken);
+
+        var commandTranslation = new CreateProductTranslationsCommand
+        {
+            ProductId = product.Id,
+            Name = command.Name,
+            Description = command.Description,
+            LanguageId = command.LanguageId,
+        };
+        
+        var handler = new CreateProductTranslationsCommandHandler(repository);
+        var result = await handler.Handle(commandTranslation, cancellationToken);
         
         return await Task.FromResult(
-            Result.Success(new CreateProductResponseDto(command.Name))
+            result.IsSuccess ? 
+                Result.Success(new CreateProductResponseDto(product.Id.ToString())) 
+                : Result.Failure<CreateProductResponseDto>(Error.Conflict("400", result.Error.ToString()))
         );
     }
 }
